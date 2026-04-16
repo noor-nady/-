@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نظام كاشير | تسجيل الدخول</title>
+  <meta name="description" content="نظام كاشير متكامل لإدارة المبيعات وربط البائعين" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="login-page">
+
+  <div class="login-bg">
+    <div class="login-glow"></div>
+    <div class="login-glow login-glow-2"></div>
+  </div>
+
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="2" y="2" width="32" height="32" rx="10" fill="url(#grad1)" />
+            <path d="M10 14h16M10 18h10M10 22h12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <rect x="20" y="19" width="8" height="8" rx="2" fill="white" opacity="0.9"/>
+            <defs>
+              <linearGradient id="grad1" x1="2" y1="2" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#6C63FF"/>
+                <stop offset="1" stop-color="#3ECFCF"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h1 class="logo-name">KASHEER</h1>
+        <span class="logo-sub">نظام إدارة المبيعات</span>
+      </div>
+
+      <form id="loginForm" class="login-form" novalidate>
+        <div class="form-group">
+          <label for="username">اسم المستخدم</label>
+          <div class="input-wrap">
+            <input type="text" id="username" name="username" placeholder="أدخل اسم المستخدم" autocomplete="username" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">كلمة المرور</label>
+          <div class="input-wrap input-wrap-pass">
+            <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" autocomplete="current-password" required />
+            <button type="button" class="toggle-pass" id="togglePass" tabindex="-1">
+              <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="loginError" class="login-error hidden">اسم المستخدم أو كلمة المرور غير صحيحة</div>
+
+        <button type="submit" class="btn-login" id="loginBtn">
+          <span>دخول</span>
+        </button>
+      </form>
+
+      <div class="login-hint">
+        <strong>الأدمن الافتراضي:</strong> admin / admin123
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    initApp();
+
+    document.getElementById('togglePass').addEventListener('click', function () {
+      const pass = document.getElementById('password');
+      pass.type = pass.type === 'password' ? 'text' : 'password';
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const err = document.getElementById('loginError');
+      err.classList.add('hidden');
+
+      const user = loginUser(username, password);
+      if (user) {
+        document.getElementById('loginBtn').innerHTML = '<span>جاري الدخول...</span>';
+        setTimeout(() => {
+          if (user.role === 'admin') {
+            window.location.href = 'admin.html';
+          } else {
+            window.location.href = 'cashier.html';
+          }
+        }, 600);
+      } else {
+        err.classList.remove('hidden');
+        document.getElementById('loginForm').classList.add('shake');
+        setTimeout(() => document.getElementById('loginForm').classList.remove('shake'), 600);
+      }
+    });
+  </script>
+</body>
+</html>
